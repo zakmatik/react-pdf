@@ -1,3 +1,5 @@
+import { PDFDataRangeTransport } from 'pdfjs-dist';
+
 /**
  * Checks if we're running in a browser environment.
  */
@@ -160,3 +162,69 @@ export const loadFromFile = file => new Promise((resolve, reject) => {
 
   return null;
 });
+
+const normalizeFile = (file) => {
+  // File is a string
+  if (typeof file === 'string') {
+    return { url: file };
+  }
+
+  // File is PDFDataRangeTransport
+  if (file instanceof PDFDataRangeTransport) {
+    return { range: file };
+  }
+
+  // File is an ArrayBuffer
+  if (isArrayBuffer(file)) {
+    return { data: file };
+  }
+
+  /**
+   * The cases below are browser-only.
+   * If you're running on a non-browser environment, these cases will be of no use.
+   */
+  if (isBrowser) {
+    // File is a Blob
+    if (isBlob(file) || isFile(file)) {
+      return { data: file };
+    }
+  }
+
+  return file;
+};
+
+export const isFileEqual = (file, nextFile) => {
+  const normalizedFile = normalizeFile(file);
+  const normalizedNextFile = normalizeFile(nextFile);
+
+  if (!normalizedFile && !normalizedNextFile) {
+    return true;
+  }
+
+  if (Boolean(normalizedFile) !== Boolean(normalizedNextFile)) {
+    return false;
+  }
+
+  if (normalizedFile.data && normalizedNextFile.data) {
+    if (normalizedFile.constructor !== normalizedNextFile.constructor) {
+      return false;
+    }
+
+    /**
+     * Theoretically, we could compare files here by reading them, but that would severely affect
+     * performance. Therefore, we're making a compromise here, agreeing on not loading the next
+     * file if its size is identical as the previous one's.
+     */
+    return normalizedFile.data.byteLength === normalizedNextFile.data.byteLength;
+  }
+
+  if (normalizedFile.range && normalizedNextFile.range) {
+    return normalizedFile.range === normalizedNextFile.range;
+  }
+
+  if (normalizedFile.url && normalizedNextFile.url) {
+    return normalizedFile.url === normalizedNextFile.url;
+  }
+
+  return true;
+};

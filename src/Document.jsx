@@ -28,6 +28,7 @@ import {
   isFile,
   loadFromFile,
   warnOnDev,
+  isFileEqual,
 } from './shared/utils';
 
 import { eventProps, isClassName } from './shared/propTypes';
@@ -70,7 +71,8 @@ export default class Document extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { file } = this.props;
-    if (file !== prevProps.file) {
+
+    if (!isFileEqual(prevProps.file, file)) {
       this.loadDocument();
     }
   }
