@@ -30,13 +30,16 @@ import {
   isRenderMode,
   isRotate,
 } from './shared/propTypes';
+import imageLayer from './imageLayer';
+import ImageLayer from './Page/ImageLayer';
 
 const defaultScale = 1.0;
 
 export class PageInternal extends PureComponent {
   state = {
     page: null,
-  }
+    images: []
+  };
 
   componentDidMount() {
     const { pdf } = this.props;
@@ -111,6 +114,7 @@ export class PageInternal extends PureComponent {
       renderInteractiveForms,
       rotate: this.rotate,
       scale: this.scale,
+      imageLayer: imageLayer(this.onImageAppend),
     };
   }
 
@@ -145,6 +149,12 @@ export class PageInternal extends PureComponent {
       onLoadError,
       error,
     );
+  }
+
+  onImageAppend = (image) => {
+    const updatedImages = this.state.images.slice();
+    updatedImages.push(image);
+    this.setState({images: updatedImages})
   }
 
   getPageIndex(props = this.props) {
@@ -302,6 +312,12 @@ export class PageInternal extends PureComponent {
     );
   }
 
+  renderImageLayer() {
+    return (
+      <ImageLayer key={`${this.pageKey}_image`} images={this.state.images}/>
+    )
+  }
+
   renderAnnotationLayer() {
     const { renderAnnotationLayer } = this.props;
 
@@ -329,6 +345,7 @@ export class PageInternal extends PureComponent {
       <PageContext.Provider value={this.childContext}>
         {this.renderMainLayer()}
         {this.renderTextLayer()}
+        {this.renderImageLayer()}
         {this.renderAnnotationLayer()}
         {children}
       </PageContext.Provider>

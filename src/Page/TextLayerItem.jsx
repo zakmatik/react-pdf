@@ -127,6 +127,7 @@ export class TextLayerItemInternal extends PureComponent {
           whiteSpace: 'pre',
           pointerEvents: 'all',
         }}
+        className="react-pdf__Text"
       >
         {
           customTextRenderer

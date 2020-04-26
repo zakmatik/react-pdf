@@ -111,12 +111,16 @@ export class PageCanvasInternal extends PureComponent {
     canvas.style.width = `${Math.floor(viewport.width)}px`;
     canvas.style.height = `${Math.floor(viewport.height)}px`;
 
+    this.props.imageLayer.setHeightRatio(Math.floor(viewport.height), renderViewport.height);
+    this.props.imageLayer.setWidthRatio(Math.floor(viewport.width), renderViewport.width);
+
     const renderContext = {
       get canvasContext() {
         return canvas.getContext('2d');
       },
       viewport: renderViewport,
       renderInteractiveForms,
+      imageLayer: this.props.imageLayer,
     };
 
     // If another render is in progress, let's cancel it
@@ -144,6 +148,7 @@ export class PageCanvasInternal extends PureComponent {
 }
 
 PageCanvasInternal.propTypes = {
+  imageLayer: PropTypes.object,
   onRenderError: PropTypes.func,
   onRenderSuccess: PropTypes.func,
   page: isPage.isRequired,

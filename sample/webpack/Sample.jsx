@@ -13,6 +13,7 @@ export default class Sample extends Component {
   state = {
     file: './sample.pdf',
     numPages: null,
+    textItems: [],
   }
 
   onFileChange = (event) => {
@@ -55,6 +56,7 @@ export default class Sample extends Component {
                     <Page
                       key={`page_${index + 1}`}
                       pageNumber={index + 1}
+                      onMouseUp={this.onMouseUp}
                     />
                   ),
                 )
@@ -64,5 +66,11 @@ export default class Sample extends Component {
         </div>
       </div>
     );
+  }
+
+  onMouseUp = (e) => {
+    console.log(e);
+    console.log(e.target);
+    console.log(window.getSelection().toString());
   }
 }
