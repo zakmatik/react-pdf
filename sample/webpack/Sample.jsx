@@ -11,7 +11,7 @@ const options = {
 
 export default class Sample extends Component {
   state = {
-    file: './sample.pdf',
+    file: './sample-2.pdf',
     numPages: null,
     textItems: [],
   }

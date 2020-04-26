@@ -10,13 +10,13 @@ const imageLayer = (onAppend) => {
     appendImage: (imageProps) => {
       console.log('appendImage', imageProps);
 
-      console.log('multiplying width/left by ', canvasWidthRatio);
-      console.log('multiplying height/top by ', canvasHeightRatio);
+      console.log('multiplying width/left by: ', canvasWidthRatio);
+      console.log('multiplying height/top by: ', canvasHeightRatio);
       const newHeight = imageProps.height * canvasHeightRatio;
       const appendProps = Object.assign({}, imageProps, {
         left: imageProps.left * canvasWidthRatio,
         width: imageProps.width * canvasWidthRatio,
-        top: imageProps.top * canvasHeightRatio - newHeight,
+        top: imageProps.top * canvasHeightRatio,
         height: newHeight,
       });
       if (onAppend) {
