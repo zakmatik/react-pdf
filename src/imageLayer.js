@@ -2,16 +2,10 @@ const imageLayer = (onAppend) => {
   let canvasWidthRatio = 0.0, canvasHeightRatio = 0.0;
   return {
     beginLayout: () => {
-      console.log('beginLayout');
     },
     endLayout: () => {
-      console.log('endLayout');
     },
     appendImage: (imageProps) => {
-      console.log('appendImage', imageProps);
-
-      console.log('multiplying width/left by: ', canvasWidthRatio);
-      console.log('multiplying height/top by: ', canvasHeightRatio);
       const newHeight = imageProps.height * canvasHeightRatio;
       const appendProps = Object.assign({}, imageProps, {
         left: imageProps.left * canvasWidthRatio,
